@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Gestor Z</title>
+
+    <!-- TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- Google Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-[#ffffff] text-white font-montserrat">
+
+    <!-- Cabeçalho -->
+    <header class="bg-[#228cad] py-4 px-6 fixed w-full z-50 shadow-md">
+        <div class="max-w-screen-2xl mx-auto flex justify-between items-center">
+            <img src="./fotos/logoz.png" alt="GestorZ" class="w-32">
+            <div class="flex items-center gap-6">
+                <div class="w-10 h-10 flex items-center justify-center bg-[#FFF] rounded-full">
+                    <span class="material-icons text-gray-800">person</span>
+                </div>
+                <div class="hidden md:flex items-center bg-white text-black px-4 py-2 rounded-full w-96">
+                    <span class="material-icons text-gray-400">search</span>
+                    <input type="text" placeholder="Pesquisar..." class="ml-2 w-full outline-none bg-transparent text-sm">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <aside class="fixed top-0 left-0 h-screen w-64 bg-[#1aafbd] p-6 pt-20 shadow-lg hidden md:block">
+        <nav class="flex flex-col space-y-6">
+            <a href="#" class="flex items-center gap-3 text-white hover:text-accent-400">
+                <span class="material-icons">home</span>
+                <p>Início</p>
+            </a>
+            <a href="#" class="flex items-center gap-3 text-white hover:text-accent-400">
+                <span class="material-icons">folder</span>
+                <p>Vídeos</p>
+            </a>
+        </nav>
+        <!-- Caixa de PDFs -->
+        <nav class="flex flex-col space-y-6 mt-4">
+          <a href="URL_DO_SEU_PDF_AQUI.pdf" target="_blank"
+            class="flex items-center gap-3 text-white hover:text-accent-400">
+              <span class="material-icons">folder</span>
+              <p>PDFs</p>
+          </a>
+        </nav>
+    </aside>
+
+    <!-- Conteúdo Principal -->
+    <main class="ml-0 md:ml-64 px-6 pt-28 pb-10">
+
+        <!-- Container do Carrossel -->
+        <div class="relative flex justify-center" x-data="{ scrollPosition: 0 }">
+            <!-- Scroll Esquerda -->
+            <button @click="scrollLeft()" class="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-black/50 text-white p-3 rounded-full">
+                <span class="material-icons">chevron_left</span>
+            </button>
+
+            <!-- Lista de Itens -->
+            <div class="overflow-x-auto flex flex-col space-y-4 items-center scrollbar-hide"
+                 style="scroll-behavior: smooth;"
+                 x-ref="carousel">
+                <!-- Primeira Linha -->
+                <div class="space-y-4 items-center flex space-x-4 w-max px-4 ">
+                    <template x-for="(item, index) in 15" :key="index">
+                        <div class="w-52 h-72 bg-[#607d8b] rounded-xl flex items-center justify-center text-white text-lg font-bold">
+                            Item <span x-text="index + 2"></span>
+                        </div>
+                    </template>
+                </div>
+                <div class="space-y-4 items-center flex space-x-4 w-max px-4">
+                  <template x-for="(item, index) in 15" :key="index">
+                      <div class="w-52 h-72 bg-[#607d8b] rounded-xl flex items-center justify-center text-white text-lg font-bold">
+                          Item <span x-text="index + 2"></span>
+                      </div>
+                  </template>''
+              </div>
+
+                <!-- Segunda Linha -->
+                <div class="space-y-4 items-center flex space-x-4 w-max px-4">
+                    <template x-for="(item, index) in 15" :key="index">
+                        <div class="w-52 h-72 bg-[#607d8b] rounded-xl flex items-center justify-center text-white text-lg font-bold">
+                            Item <span x-text="index + 16"></span>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Scroll Direita -->
+            <button @click="scrollRight()" class="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-black/50 text-white p-3 rounded-full">
+                <span class="material-icons">chevron_right</span>
+            </button>
+        </div>
+    </main>
+
+    <!-- Estilos para esconder a scrollbar -->
+    <style>
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+
+    <!-- JavaScript para controle do carrossel -->
+    <script>
+        function scrollLeft() {
+            document.querySelector('[x-ref="carousel"]').scrollBy({
+                left: -500,
+                behavior: 'smooth'
+            });
+        }
+
+        function scrollRight() {
+            document.querySelector('[x-ref="carousel"]').scrollBy({
+                left: 500,
+                behavior: 'smooth'
+            });
+        }
+    </script>
+
+</body>
+</html>
