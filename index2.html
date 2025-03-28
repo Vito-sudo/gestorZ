@@ -19,42 +19,142 @@
 <body class="bg-[#ffffff] text-white font-montserrat">
 
     <!-- Cabeçalho -->
-    <header class="bg-[#228cad] py-4 px-6 fixed w-full z-50 shadow-md">
-        <div class="max-w-screen-2xl mx-auto flex justify-between items-center">
-            <img src="./fotos/logoz.png" alt="GestorZ" class="w-32">
-            <div class="flex items-center gap-6">
-                <div class="w-10 h-10 flex items-center justify-center bg-[#FFF] rounded-full">
-                    <span class="material-icons text-gray-800">person</span>
-                </div>
-                <div class="hidden md:flex items-center bg-white text-black px-4 py-2 rounded-full w-96">
-                    <span class="material-icons text-gray-400">search</span>
-                    <input type="text" placeholder="Pesquisar..." class="ml-2 w-full outline-none bg-transparent text-sm">
-                </div>
-            </div>
+    <header class="bg-[#228cad] py-3 px-7 fixed w-full z-50 shadow-md">
+      <div class="max-w-screen-2xl mx-auto flex items-center justify-between">
+        <!-- Logo -->
+        <img src="./fots.svg/logoz.png" alt="GestorZ" class="w-20" />
+    
+        <!-- Barra de pesquisa (centralizada com grow) -->
+        <div class="flex-1 flex justify-center">
+          <div class="hidden md:flex items-center bg-white text-black px-4 py-2 rounded-full w-full max-w-xl">
+            <span class="material-icons text-gray-400">search</span>
+            <input
+              type="text"
+              placeholder="Pesquisar..."
+              class="ml-2 w-full outline-none bg-transparent text-sm"
+            />
+          </div>
         </div>
+    
+        <!-- Foto de perfil -->
+        <div class="relative w-16 h-16 ml-4">
+          <label
+            for="profileImage"
+            class="cursor-pointer w-16 h-16 rounded-full bg-white flex items-center justify-center overflow-hidden border border-gray-300 shadow-sm relative"
+          >
+            <img
+              id="previewImage"
+              class="hidden absolute inset-0 w-full h-full object-cover object-center"
+            />
+            <span
+              id="defaultIcon"
+              class="material-icons text-gray-800 text-3xl z-10"
+              >person</span
+            >
+          </label>
+    
+          <input
+            id="profileImage"
+            type="file"
+            accept="image/*"
+            class="hidden"
+            onchange="previewProfileImage(event)"
+          />
+        </div>
+      </div>
     </header>
+    
+    <script>
+      function previewProfileImage(event) {
+        const file = event.target.files[0];
+        const previewImage = document.getElementById("previewImage");
+        const defaultIcon = document.getElementById("defaultIcon");
+    
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            previewImage.src = e.target.result;
+            previewImage.classList.remove("hidden");
+            defaultIcon.classList.add("hidden");
+          };
+          reader.readAsDataURL(file);
+        }
+      }
+    </script>    
 
     <!-- Sidebar -->
-    <aside class="fixed top-0 left-0 h-screen w-64 bg-[#1aafbd] p-6 pt-20 shadow-lg hidden md:block">
-        <nav class="flex flex-col space-y-6">
-            <a href="#" class="flex items-center gap-3 text-white hover:text-accent-400">
-                <span class="material-icons">home</span>
-                <p>Início</p>
-            </a>
-            <a href="#" class="flex items-center gap-3 text-white hover:text-accent-400">
-                <span class="material-icons">folder</span>
-                <p>Vídeos</p>
-            </a>
-        </nav>
-        <!-- Caixa de PDFs -->
-        <nav class="flex flex-col space-y-6 mt-4">
-          <a href="URL_DO_SEU_PDF_AQUI.pdf" target="_blank"
-            class="flex items-center gap-3 text-white hover:text-accent-400">
-              <span class="material-icons">folder</span>
-              <p>PDFs</p>
+    <aside class="fixed top-5 left-0 h-screen w-60 bg-[#1aafbd] p-6 pt-16 shadow-lg hidden md:block">
+      <nav class="flex flex-col space-y-6 pt-8 text-white">
+    
+        <!-- Caixa: Início -->
+        <div class="bg-white text-black rounded-lg p-3 shadow-md hover:shadow-lg transition-all">
+          <a href="#" class="flex items-center gap-3">
+            <span class="material-icons">home</span>
+            <p>Início</p>
           </a>
-        </nav>
+        </div>
+    
+        <!-- Caixa: Progresso do Curso -->
+        <div class="bg-white text-black rounded-lg p-4 shadow-md">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="text-sm font-semibold">Progresso do Curso</h3>
+            <span id="progressText" class="text-xs font-medium">0%</span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-3">
+            <div id="progressBar" class="bg-[#1aafbd] h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
+          </div>
+          <button
+            onclick="simulateProgress()"
+            class="mt-3 w-full text-xs text-white bg-[#1aafbd] hover:bg-[#1594a3] rounded px-2 py-1"
+          >
+            Assistir Vídeo
+          </button>
+        </div>
+    
+        <!-- Caixa: Aulas (PDFs) -->
+        <div class="bg-white text-black rounded-lg p-4 shadow-md">
+          <button onclick="togglePDFs()" class="flex items-center gap-3 w-full text-left">
+            <span class="material-icons">description</span>
+            <p>Aulas (PDFs)</p>
+          </button>
+          <div id="pdfContainer" class="mt-2 max-h-0 overflow-y-auto transition-all duration-500 ease-in-out">
+            <ul class="text-xs space-y-1">
+              <li><a href="#" class="hover:underline text-blue-600">Aula 1 - Introdução.pdf</a></li>
+              <li><a href="#" class="hover:underline text-blue-600">Aula 2 - Finanças Pessoais.pdf</a></li>
+              <li><a href="#" class="hover:underline text-blue-600">Aula 3 - Investimentos.pdf</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Caixa: Diploma -->
+        <div class="bg-white text-black rounded-lg p-3 shadow-md hover:shadow-lg transition-all">
+          <a href="#" class="flex items-center gap-3">
+            <span class="material-icons">folder</span>
+            <p>Diploma</p>
+          </a>
+        </div>
+    
+      </nav>
     </aside>
+    
+    <script>
+      let currentProgress = 0;
+      let isOpen = false;
+    
+      function simulateProgress() {
+        if (currentProgress >= 100) return;
+        currentProgress += 20;
+        if (currentProgress > 100) currentProgress = 100;
+        document.getElementById("progressBar").style.width = currentProgress + "%";
+        document.getElementById("progressText").textContent = currentProgress + "%";
+      }
+    
+      function togglePDFs() {
+        const container = document.getElementById("pdfContainer");
+        container.classList.toggle("max-h-0");
+        container.classList.toggle("max-h-60");
+      }
+    </script>            
 
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
