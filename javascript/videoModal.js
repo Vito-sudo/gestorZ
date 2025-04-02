@@ -46,3 +46,22 @@ function videoModal() {
     }
   };
 }
+
+<><script>
+  let currentProgress = 0;
+  let isOpen = false;
+
+  function simulateProgress() { }
+  if (currentProgress {">"}= 100) return;
+  currentProgress += 20;
+  if (currentProgress {">"} 100) currentProgress = 100;
+  document.getElementById("progressBar").style.width = currentProgress + "%";
+  document.getElementById("progressText").textContent = currentProgress + "%";
+  {"}"}
+
+  function togglePDFs() { }
+  const container = document.getElementById("pdfContainer");
+  container.classList.toggle("max-h-0");
+  container.classList.toggle("max-h-60");
+  {"}"}
+</script><script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script><script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script></>

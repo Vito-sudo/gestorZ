@@ -1,87 +1,273 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <title>Gestor Z</title>
 
+    <!-- TailwindCSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- Google Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
-<body class="bg-gray-200">
-    <div class="from-[#1aafbd] via-[#1aafbd] to-[#1aafbd] absolute top-0 left-0 bg-gradient-to-b bottom-0 leading-5 h-full w-full overflow-hidden">
-        <div class="absolute top-4 left-4">
-            <img src="./fots.svg/logoz.png" alt="GestorZ" class="w-32">
-        </div>
-    </div>
+<body class="bg-[#ffffff] text-white font-montserrat">
 
-    <div class="relative min-h-screen sm:flex sm:flex-row justify-center bg-transparent rounded-3xl shadow-xl">
-        <div class="flex-col flex self-center lg:px-14 sm:max-w-4xl xl:max-w-md z-10">
-            <div class="flex flex-col items-center">
-                <h1 class="font-poppins text-5xl text-white mb-6">Bem vindo de volta a GestorZ</h1>
-                <p class="opacity-90  font-poppins text-white">
-                    Gestão inovadora para empresas modernas.
-                    Automação e tecnologia para seu negócio crescer.
-                    Simplificamos processos, maximizamos resultados.
-                    Conectamos eficiência à inovação. 🚀
-                </p>
+    <!-- Cabeçalho -->
+    <header class="bg-[#228cad] py-3 px-7 fixed w-full z-50 shadow-md">
+      <div class="max-w-screen-2xl mx-auto flex items-center justify-between">
+        <!-- Logo -->
+        <img src="./fots.svg/logoz.png" alt="GestorZ" class="w-20" />
+
+        <!-- Barra de pesquisa (centralizada com grow) -->
+        <div class="flex-1 flex justify-center">
+          <div class="hidden md:flex items-center bg-white text-black px-4 py-2 rounded-full w-full max-w-xl">
+            <span class="material-icons text-gray-400">search</span>
+            <input
+              type="text"
+              placeholder="Pesquisar..."
+              class="ml-2 w-full outline-none bg-transparent text-sm"
+            />
+          </div>
+        </div>
+
+        <!-- Foto de perfil -->
+        <div class="relative w-16 h-16 ml-4">
+          <label
+            for="profileImage"
+            class="cursor-pointer w-16 h-16 rounded-full bg-white flex items-center justify-center overflow-hidden border border-gray-300 shadow-sm relative"
+          >
+            <img
+              id="previewImage"
+              class="hidden absolute inset-0 w-full h-full object-cover object-center"
+            />
+            <span
+              id="defaultIcon"
+              class="material-icons text-gray-800 text-3xl z-10"
+              >person</span
+            >
+          </label>
+
+          <input
+            id="profileImage"
+            type="file"
+            accept="image/*"
+            class="hidden"
+            onchange="previewProfileImage(event)"
+          />
+        </div>
+      </div>
+    </header>
+
+    <!-- Sidebar -->
+    <aside class="fixed top-5 left-0 h-screen w-60 bg-[#1aafbd] p-6 pt-16 shadow-lg hidden md:block">
+      <nav class="flex flex-col space-y-6 pt-8 text-white">
+
+        <!-- Caixa: Início -->
+        <div class="bg-white text-black rounded-lg p-3 shadow-md hover:shadow-lg transition-all">
+          <a href="#" class="flex items-center gap-3">
+            <span class="material-icons">home</span>
+            <p>Início</p>
+          </a>
+        </div>
+
+        <!-- Caixa: Progresso do Curso -->
+        <div class="bg-white text-black rounded-lg p-4 shadow-md">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="text-sm font-semibold">Progresso do Curso</h3>
+            <span id="progressText" class="text-xs font-medium">0%</span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-3">
+            <div id="progressBar" class="bg-[#1aafbd] h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
+          </div>
+          <button
+            onclick="simulateProgress()"
+            class="mt-3 w-full text-xs text-white bg-[#1aafbd] hover:bg-[#1594a3] rounded px-2 py-1"
+          >
+            Assistir Vídeo
+          </button>
+        </div>
+
+        <!-- Caixa: Aulas (PDFs) -->
+        <div class="bg-white text-black rounded-lg p-4 shadow-md">
+          <button onclick="togglePDFs()" class="flex items-center gap-3 w-full text-left">
+            <span class="material-icons">description</span>
+            <p>Aulas (PDFs)</p>
+          </button>
+          <div id="pdfContainer" class="mt-2 max-h-0 overflow-y-auto transition-all duration-500 ease-in-out">
+            <ul class="text-xs space-y-1">
+              <li><a href="./pdfs/Documentação do Fluxo.md" class="hover:underline text-blue-600">Aula 1 - Introdução.pdf</a></li>
+              <li><a href="#" class="hover:underline text-blue-600">Aula 2 - Finanças Pessoais.pdf</a></li>
+              <li><a href="#" class="hover:underline text-blue-600">Aula 3 - Investimentos.pdf</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Caixa: Diploma -->
+        <div class="bg-white text-black rounded-lg p-3 shadow-md hover:shadow-lg transition-all">
+          <a href="#" class="flex items-center gap-3">
+            <span class="material-icons">folder</span>
+            <p>Diploma</p>
+          </a>
+        </div>
+
+      </nav>
+    </aside>
+
+    <script>
+      let currentProgress = 0;
+      let isOpen = false;
+
+      function simulateProgress() {
+        if (currentProgress >= 100) return;
+        currentProgress += 20;
+        if (currentProgress > 100) currentProgress = 100;
+        document.getElementById("progressBar").style.width = currentProgress + "%";
+        document.getElementById("progressText").textContent = currentProgress + "%";
+      }
+
+      function togglePDFs() {
+        const container = document.getElementById("pdfContainer");
+        container.classList.toggle("max-h-0");
+        container.classList.toggle("max-h-60");
+      }
+    </script>
+
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <main class="ml-0 md:ml-64 px-6 pt-28 pb-10 flex justify-center">
+      <div
+        class="relative flex flex-col items-center w-full max-w-6xl"
+        x-data="{
+          showModal: false,
+          selectedVideo: null,
+          videos: [
+            { id: 1, title: 'Descrição do item 1', videoId: '4pDOo4ftzmE', pdf: 'pdfs/item1.pdf' },
+            { id: 2, title: 'Descrição do item 2', videoId: '3tmd-ClpJxA', pdf: 'pdfs/item2.pdf' },
+            { id: 3, title: 'Descrição do item 3', videoId: 'L_jWHffIx5E', pdf: 'pdfs/item3.pdf' },
+            { id: 4, title: 'Descrição do item 4', videoId: 'eVTXPUF4Oz4', pdf: 'pdfs/item4.pdf' },
+            { id: 5, title: 'Descrição do item 5', videoId: 'fLexgOxsZu0', pdf: 'pdfs/item5.pdf' },
+            { id: 6, title: 'Descrição do item 6', videoId: '9bZkp7q19f0', pdf: 'pdfs/item6.pdf' },
+            { id: 7, title: 'Descrição do item 7', videoId: 'ktvTqknDobU', pdf: 'pdfs/item7.pdf' },
+            { id: 8, title: 'Descrição do item 8', videoId: 'RgKAFK5djSk', pdf: 'pdfs/item8.pdf' },
+            { id: 9, title: 'Descrição do item 9', videoId: 'OPf0YbXqDm0', pdf: 'pdfs/item9.pdf' },
+            { id: 10, title: 'Descrição do item 10', videoId: '2Vv-BfVoq4g', pdf: 'pdfs/item10.pdf' },
+            { id: 11, title: 'Descrição do item 11', videoId: 'JGwWNGJdvx8', pdf: 'pdfs/item11.pdf' },
+            { id: 12, title: 'Descrição do item 12', videoId: '60ItHLz5WEA', pdf: 'pdfs/item12.pdf' },
+            { id: 13, title: 'Descrição do item 13', videoId: 'hT_nvWreIhg', pdf: 'pdfs/item13.pdf' },
+            { id: 14, title: 'Descrição do item 14', videoId: 'YqeW9_5kURI', pdf: 'pdfs/item14.pdf' },
+            { id: 15, title: 'Descrição do item 15', videoId: 'nYh-n7EOtMA', pdf: 'pdfs/item15.pdf' },
+            { id: 16, title: 'Descrição do item 16', videoId: 'pRpeEdMmmQ0', pdf: 'pdfs/item16.pdf' },
+            { id: 17, title: 'Descrição do item 17', videoId: 'uelHwf8o7_U', pdf: 'pdfs/item17.pdf' },
+            { id: 18, title: 'Descrição do item 18', videoId: 'CevxZvSJLk8', pdf: 'pdfs/item18.pdf' },
+            { id: 19, title: 'Descrição do item 19', videoId: 'fRh_vgS2dFE', pdf: 'pdfs/item19.pdf' },
+            { id: 20, title: 'Descrição do item 20', videoId: 'VbfpW0pbvaU', pdf: 'pdfs/item20.pdf' },
+            { id: 21, title: 'Descrição do item 21', videoId: 'SlPhMPnQ58k', pdf: 'pdfs/item21.pdf' },
+            { id: 22, title: 'Descrição do item 22', videoId: 'FM7MFYoylVs', pdf: 'pdfs/item22.pdf' },
+            { id: 23, title: 'Descrição do item 23', videoId: '09R8_2nJtjg', pdf: 'pdfs/item23.pdf' },
+            { id: 24, title: 'Descrição do item 24', videoId: '450p7goxZqg', pdf: 'pdfs/item24.pdf' },
+            { id: 25, title: 'Descrição do item 25', videoId: 'iS1g8G_njx8', pdf: 'pdfs/item25.pdf' },
+            { id: 26, title: 'Descrição do item 26', videoId: 'MYSVMgRr6pw', pdf: 'pdfs/item26.pdf' },
+            { id: 27, title: 'Descrição do item 27', videoId: 'hLQl3WQQoQ0', pdf: 'pdfs/item27.pdf' },
+            { id: 28, title: 'Descrição do item 28', videoId: 'uelHwf8o7_U', pdf: 'pdfs/item28.pdf' },
+            { id: 29, title: 'Descrição do item 29', videoId: 'YykjpeuMNEk', pdf: 'pdfs/item29.pdf' },
+            { id: 30, title: 'Descrição do item 30', videoId: '34Na4j8AVgA', pdf: 'pdfs/item30.pdf' }
+          ]
+        }"
+      >
+        <!-- Lista de Itens -->
+        <div class="overflow-x-auto flex flex-col space-y-4 w-full px-12 scrollbar-hide items-center" style="scroll-behavior: smooth;" x-ref="carousel">
+          <!-- Lista de Itens -->
+          <div class="overflow-x-auto flex flex-col space-y-4 w-full px-12 scrollbar-hide items-center" style="scroll-behavior: smooth;" x-ref="carousel">
+            <!-- Grade de Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 justify-center">
+              <template x-for="video in videos" :key="video.id">
+                <div
+                  @click="selectedVideo = video; showModal = true"
+                  class="w-48 h-72 bg-[#607d8b] rounded-lg flex flex-col items-center justify-start text-white text-lg font-bold shadow-lg p-2 hover:brightness-110 transition cursor-pointer"
+                >
+                  <!-- Thumbnail do YouTube -->
+                  <img :src="`https://img.youtube.com/vi/${video.videoId}/hqdefault.jpg`" alt="Thumbnail" class="w-full h-32 object-cover rounded-md mb-2">
+                  <div>Item <span x-text="video.id"></span></div>
+                  <div class="text-sm font-normal text-center mt-2" x-text="video.title"></div>
+                </div>
+              </template>
             </div>
-        </div>
+          </div>
 
-        <div class="flex justify-center self-center z-10 drop-shadow-lg">
-            <div class="p-16 bg-white mx-auto rounded-3xl w-[30rem]">
-                <div class="mb-7">
-                    <h3 class="font-semibold text-3xl text-[#607d8b]">Login</h3>
+          <!-- Modal -->
+          <div
+            class="fixed inset-0 z-[999] bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center transition-opacity"
+            x-show="showModal"
+            x-transition
+          >
+            <div class="relative bg-white rounded-lg w-full max-w-3xl shadow-lg overflow-hidden">
+              <!-- Botão Fechar -->
+              <button
+                class="absolute top-2 right-2 text-slate-500 hover:text-red-600 text-2xl"
+                @click="showModal = false"
+              >✕</button>
+
+              <!-- Conteúdo do Modal -->
+              <div class="p-4">
+                <h2 class="text-lg font-semibold text-slate-800 mb-4" x-text="selectedVideo.title"></h2>
+
+                <!-- Vídeo incorporado -->
+                <div class="relative w-full pb-[56.25%] h-0 overflow-hidden rounded-lg">
+                  <iframe
+                    class="absolute top-0 left-0 w-full h-full"
+                    :src="`https://www.youtube.com/embed/${selectedVideo.videoId}?autoplay=1`"
+                    frameborder="0"
+                    allowfullscreen
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  ></iframe>
                 </div>
 
-                <div class="space-y-6">
-                    <div>
-                        <input class="w-full text-lg px-4 py-3 bg-gray-200 focus:bg-gray-100 border border-gray-200 rounded-lg focus:outline-none focus:border-purple-400" type="email" placeholder="Email">
-                    </div>
-
-                    <div class="relative">
-                        <input placeholder="Senha" type="password" class="text-lg text-gray-200 px-4 py-3 rounded-lg w-full bg-gray-200 focus:bg-gray-100 border border-gray-200 focus:outline-none focus:border-purple-400">
-                        <div class="flex items-center absolute inset-y-0 right-0 mr-3 text-sm leading-5">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" fill="#1aafbd" width="24" height="24">
-                                <path d="M572.52 241.4C518.29 135.59 410.93 64 288 64S57.68 135.64 3.48 241.41a32.35 32.35 0 0 0 0 29.19C57.71 376.41 165.07 448 288 448s230.32-71.64 284.52-177.41a32.35 32.35 0 0 0 0-29.19zM288 400a144 144 0 1 1 144-144 143.93 143.93 0 0 1-144 144zm0-240a95.31 95.31 0 0 0-25.31 3.79 47.85 47.85 0 0 1-66.9 66.9A95.78 95.78 0 1 0 288 160z"/>
-                            </svg>
-                        </div>
-                    </div>
-
-                    <div class="flex items-center justify-between">
-                        <div class="text-lg ml-auto">
-                            <a href="#" class="text-[#607d8b] hover:text-[#455a64]">Esqueceu sua senha?</a>
-                        </div>
-                    </div>
-
-                    <div>
-                        <button type="submit" class="w-full flex justify-center bg-gradient-to-r from-[#1aafbd] to-[#3b2681] text-gray-100 p-3 rounded-lg tracking-wide font-semibold cursor-pointer transition ease-in duration-500 text-lg">
-                            Login
-                        </button>
-                    </div>
-
-                    <div class="flex items-center justify-center space-x-2 my-5">
-                        <span class="h-px w-16 bg-gray-100"></span>
-                        <span class="text-gray-300 font-normal text-lg">or</span>
-                        <span class="h-px w-16 bg-gray-100"></span>
-                    </div>
-
-                    <div class="flex justify-center gap-5 w-full">
-                        <button type="submit" class="w-full flex items-center justify-center mb-6 md:mb-0 border border-gray-300 hover:border-gray-900 hover:bg-gray-900 text-lg text-gray-500 p-3 rounded-lg tracking-wide font-medium cursor-pointer transition ease-in duration-500">
-                            <span>Google</span>
-                        </button>
-                    </div>
+                <!-- Link para download do PDF -->
+                <div class="mt-6 text-right">
+                  <a
+                    :href="selectedVideo.pdf"
+                    target="_blank"
+                    class="inline-block bg-[#228cad] hover:bg-[#1a8aa6] text-white font-semibold py-2 px-4 rounded shadow transition"
+                  >
+                    📄 Baixar PDF
+                  </a>
                 </div>
+              </div>
+              </div>
             </div>
+          </div>
+
         </div>
+      </main>
+    <!-- Estilos para esconder a scrollbar -->
+
+    <div
+    x-data="{
+      showModal: false,
+      selectedVideo: null,
+      videos: [...],
+      videosAssistidos: [],
+      progresso() {
+        return Math.round((this.videosAssistidos.length / this.videos.length) * 100);
+      },
+      marcarComoAssistido(id) {
+        if (!this.videosAssistidos.includes(id)) {
+          this.videosAssistidos.push(id);
+        }
+      }
+    }"
+    >
+    <!-- Conteúdo do seu app aqui -->
     </div>
 
-    <svg class="absolute bottom-0 left-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
-        <path fill="#fff" fill-opacity="1" d="M0,0L40,42.7C80,85,160,171,240,197.3C320,224,400,192,480,154.7C560,117,640,75,720,74.7C800,75,880,117,960,154.7C1040,192,1120,224,1200,213.3C1280,203,1360,149,1400,122.7L1440,96L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z"></path>
-    </svg>
-
-    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.js"></script>
 </body>
 </html>
-
