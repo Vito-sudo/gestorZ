@@ -19,11 +19,11 @@
 <body class="bg-[#ffffff] text-white font-montserrat">
 
     <!-- Cabeçalho -->
-    <header class="bg-[#228cad] py-3 px-7 fixed w-full z-50 shadow-md">
+    <header class="bg-[#e7f0f7] py-3 px-7 fixed w-full z-50 shadow-md">
       <div class="max-w-screen-2xl mx-auto flex items-center justify-between">
         <!-- Logo -->
         <img src="./fots.svg/logoz.png" alt="GestorZ" class="w-20" />
-    
+
         <!-- Barra de pesquisa (centralizada com grow) -->
         <div class="flex-1 flex justify-center">
           <div class="hidden md:flex items-center bg-white text-black px-4 py-2 rounded-full w-full max-w-xl">
@@ -35,7 +35,7 @@
             />
           </div>
         </div>
-    
+
         <!-- Foto de perfil -->
         <div class="relative w-16 h-16 ml-4">
           <label
@@ -52,7 +52,7 @@
               >person</span
             >
           </label>
-    
+
           <input
             id="profileImage"
             type="file"
@@ -63,13 +63,13 @@
         </div>
       </div>
     </header>
-    
+
     <script>
       function previewProfileImage(event) {
         const file = event.target.files[0];
         const previewImage = document.getElementById("previewImage");
         const defaultIcon = document.getElementById("defaultIcon");
-    
+
         if (file) {
           const reader = new FileReader();
           reader.onload = function (e) {
@@ -80,12 +80,12 @@
           reader.readAsDataURL(file);
         }
       }
-    </script>    
+    </script>
 
     <!-- Sidebar -->
-    <aside class="fixed top-5 left-0 h-screen w-60 bg-[#1aafbd] p-6 pt-16 shadow-lg hidden md:block">
+    <aside class="fixed top-5 left-0 h-screen w-60 bg-[#e7f0f7] p-6 pt-16 shadow-lg hidden md:block">
       <nav class="flex flex-col space-y-6 pt-8 text-white">
-    
+
         <!-- Caixa: Início -->
         <div class="bg-white text-black rounded-lg p-3 shadow-md hover:shadow-lg transition-all">
           <a href="#" class="flex items-center gap-3">
@@ -93,7 +93,7 @@
             <p>Início</p>
           </a>
         </div>
-    
+
         <!-- Caixa: Progresso do Curso -->
         <div class="bg-white text-black rounded-lg p-4 shadow-md">
           <div class="flex justify-between items-center mb-2">
@@ -105,12 +105,12 @@
           </div>
           <button
             onclick="simulateProgress()"
-            class="mt-3 w-full text-xs text-white bg-[#1aafbd] hover:bg-[#1594a3] rounded px-2 py-1"
+            class="mt-3 w-full text-xs text-white bg-[#40a4f3] hover:bg-[#1594a3] rounded px-2 py-1"
           >
             Assistir Vídeo
           </button>
         </div>
-    
+
         <!-- Caixa: Aulas (PDFs) -->
         <div class="bg-white text-black rounded-lg p-4 shadow-md">
           <button onclick="togglePDFs()" class="flex items-center gap-3 w-full text-left">
@@ -130,17 +130,17 @@
         <div class="bg-white text-black rounded-lg p-3 shadow-md hover:shadow-lg transition-all">
           <a href="#" class="flex items-center gap-3">
             <span class="material-icons">folder</span>
-            <p>Diploma</p>
+            <p>Certificado</p>
           </a>
         </div>
-    
+
       </nav>
     </aside>
-    
+
     <script>
       let currentProgress = 0;
       let isOpen = false;
-    
+
       function simulateProgress() {
         if (currentProgress >= 100) return;
         currentProgress += 20;
@@ -148,13 +148,13 @@
         document.getElementById("progressBar").style.width = currentProgress + "%";
         document.getElementById("progressText").textContent = currentProgress + "%";
       }
-    
+
       function togglePDFs() {
         const container = document.getElementById("pdfContainer");
         container.classList.toggle("max-h-0");
         container.classList.toggle("max-h-60");
       }
-    </script>            
+    </script>
 
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
@@ -200,7 +200,7 @@
           ]
         }"
       >
-    
+
         <!-- Lista de Itens -->
         <div class="overflow-x-auto flex flex-col space-y-4 w-full px-12 scrollbar-hide items-center" style="scroll-behavior: smooth;" x-ref="carousel">
           <!-- Lista de Itens -->
@@ -210,7 +210,7 @@
               <template x-for="video in videos" :key="video.id">
                 <div
                   @click="selectedVideo = video; showModal = true"
-                  class="w-48 h-72 bg-[#607d8b] rounded-lg flex flex-col items-center justify-start text-white text-lg font-bold shadow-lg p-2 hover:brightness-110 transition cursor-pointer"
+                  class="w-50 h-72 bg-[#607d8b] rounded-lg flex flex-col items-center justify-start text-white text-lg font-bold shadow-lg p-2 hover:brightness-110 transition cursor-pointer"
                 >
                   <!-- Thumbnail do YouTube -->
                   <img :src="`https://img.youtube.com/vi/${video.videoId}/hqdefault.jpg`" alt="Thumbnail" class="w-full h-32 object-cover rounded-md mb-2">
